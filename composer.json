@@ -2,7 +2,7 @@
     "name": "hp/ipaustralia",
     "autoload": {
         "psr-4": {
-            "Hp\\Ipaustralia\\": "src/"
+            "App\\": "src/"
         }
     },
     "authors": [
@@ -12,6 +12,7 @@
         }
     ],
     "require": {
-        "paquettg/php-html-parser": "^3.1"
+        "paquettg/php-html-parser": "^3.1",
+      "ext-curl": "*"
     }
 }
