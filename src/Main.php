@@ -8,11 +8,13 @@ use PHPHtmlParser\Exceptions\EmptyCollectionException;
 class Main
 {
     protected $csrf = null;
+    public string $txt;
 
-    public function __construct(public string $txt)
+    public function __construct($txt)
     {
-        list($ch, $result) = $this->getCsrfToken();
+        $this->txt = $txt;
 
+        list($ch, $result) = $this->getCsrfToken();
         $this->setCsrf($result);
     }
 
@@ -25,7 +27,6 @@ class Main
     public function dispatch()
     {
         list($ch, $result) = $this->request();
-
         $url = $this->getPageUrl($ch);
 
         return $this->parsePage($url);
@@ -36,7 +37,13 @@ class Main
         $main_dom = new Dom;
         $main_dom->loadFromUrl($main_url);
 
-        $last_page = $main_dom->find('.goto-last-page')->getAttribute('data-gotopage');
+
+        try {
+            $last_page = $main_dom->find('.goto-last-page')->getAttribute('data-gotopage');
+
+        } catch (EmptyCollectionException $e) {
+            $last_page = 0;
+        }
 
         $product_array = [];
 
@@ -118,7 +125,6 @@ class Main
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
 
         $result = curl_exec($ch);
-        curl_close($ch);
 
         return [$ch, $result];
 
