@@ -11,18 +11,23 @@ class Main
 
     public function __construct(public string $txt)
     {
-        $this->getCsrfToken();
+        list($ch, $result) = $this->getCsrfToken();
 
+        $this->setCsrf($result);
     }
 
     public function getCsrfToken()
     {
-        return $this->getData(true);
+        return $this->request();
     }
+
 
     public function dispatch()
     {
-        $url = $this->getData();
+        list($ch, $result) = $this->request();
+
+        $url = $this->getPageUrl($ch);
+
         return $this->parsePage($url);
     }
 
@@ -84,7 +89,22 @@ class Main
 
     }
 
-    public function getData($parse = false)
+    private function setCsrf($result)
+    {
+        $main_dom = new Dom;
+        $main_dom->loadStr($result);
+        $csrf = $main_dom->find('meta[name="_csrf"]')->getAttribute('content');
+        $this->csrf = $csrf;
+    }
+
+    public function getPageUrl($ch)
+    {
+        $result = curl_getinfo($ch);
+
+        return $result['redirect_url'];
+    }
+
+    public function request()
     {
         $ch = curl_init();
 
@@ -100,14 +120,7 @@ class Main
         $result = curl_exec($ch);
         curl_close($ch);
 
+        return [$ch, $result];
 
-        if (!$parse) {
-            $result = curl_getinfo($ch);
-            return $result['redirect_url'];
-        }
-        $main_dom = new Dom;
-        $main_dom->loadStr($result);
-        $csrf = $main_dom->find('meta[name="_csrf"]')->getAttribute('content');
-        $this->csrf = $csrf;
     }
 }
