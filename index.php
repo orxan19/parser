@@ -2,7 +2,7 @@
 
 require "vendor/autoload.php";
 
-$parser = new \App\Main($_GET['word'] ?? 'abc');
+$parser = new \App\Main($_GET['word'] ?? 'tesla');
 
 header('Content-type: application/json');
 
