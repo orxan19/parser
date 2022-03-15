@@ -1,0 +1,17 @@
+{
+    "name": "hp/ipaustralia",
+    "autoload": {
+        "psr-4": {
+            "Hp\\Ipaustralia\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "orxan19",
+            "email": "baku_orxan17@mail.ru"
+        }
+    ],
+    "require": {
+        "paquettg/php-html-parser": "^3.1"
+    }
+}
