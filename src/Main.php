@@ -92,7 +92,7 @@ class Main
         return json_encode([
             'count' => count($product_array),
             'data' => $product_array
-        ]);
+        ], JSON_PRETTY_PRINT);
 
     }
 
